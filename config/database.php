@@ -63,10 +63,11 @@ return [
             'password' => env('DB_PASSWORD', '7288Walc'),
             'unix_socket' => env('DB_SOCKET', ''),
             'charset' => 'utf8mb4',
-            'collation' => 'utf8mb4_unicode_ci',
+            'collation' => 'utf8mb4_general_ci',
             'prefix' => '',
             'strict' => true,
             'engine' => null,
+            'sslmode' => 'require',
             // Nous permettra de pouvoir créer nos utilisateurs sans aucun problème
             'mode' => [
                 'ONLY_FULL_GROUP_BY',
@@ -76,6 +77,12 @@ return [
                 'ERROR_FOR_DIVISION_BY_ZERO',
                 'NO_ENGINE_SUBSTITUTION',
             ],
+            'options'   => [
+                PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT => false,
+                PDO::MYSQL_ATTR_SSL_KEY => '/certs/client-key.pem',
+                PDO::MYSQL_ATTR_SSL_CERT => '/certs/client-cert.pem',
+                PDO::MYSQL_ATTR_SSL_CA => '/certs/ca.pem',
+            ]
         ],
 
         'pgsql' => [
