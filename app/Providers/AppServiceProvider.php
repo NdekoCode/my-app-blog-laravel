@@ -2,8 +2,12 @@
 
 namespace App\Providers;
 
+use Illuminate\Routing\UrlGenerator;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\Schema;
+
+/**
+ * Va nous permettre de recuperer nos ressources que se soit en production ou en developpement et toutes ces configuration c'est pour que le CSS puisse s'afficher
+ */
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -12,10 +16,11 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(UrlGenerator $url)
     {
-        // Pour eviter d'avoir des problèmes de namespace Lors des migrations
-        Schema::defaultStringLength(191);
+        if (env('REDIRECT_HTTPS')) {
+            $url->formatScheme('https');
+        }
     }
 
     /**
@@ -25,6 +30,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        if (env('REDIRECT_HTTPS')) {
+            $this->app['request']->server->set('HTTPS', true);
+        }
     }
 }
